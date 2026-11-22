@@ -180,7 +180,17 @@ function vHome(){const d=S.d;if(d.err&&!d.name){app.innerHTML=`<div class="card"
   $('ref').onclick=load;$('lo').onclick=()=>logout();const g=$('kget')||$('knew');if(g)g.onclick=()=>getKasa(g);if(k)tickKasa()}
 
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&S.step==='home'&&S.tok&&!S.kasa)load()});
-if(S.tok)load();else render();
+// 093: e-postadaki "bildirimlerden çık" bağlantısı (#eposta-ret=<anahtar>)
+function vRet(tok){app.innerHTML=`<div class="card"><h1>E-posta bildirimleri</h1><p class="sub">Anka İletişim'in satış fişi, sadakat programı ve servis bilgilendirme e-postalarını artık almak istemiyorsanız aşağıdaki düğmeye basın.</p>
+  <button class="btn pri" id="ret">E-posta bildirimlerinden çık</button><div class="err" id="err"></div></div>
+  <div class="card"><p class="sub" style="margin:0">Sadakat üyeliğiniz ve puanlarınız bundan etkilenmez. Fikrinizi değiştirirseniz mağazamızdan yeniden açtırabilirsiniz.</p></div>`;
+  $('ret').onclick=async()=>{const b=$('ret');b.disabled=true;b.textContent='İşleniyor…';
+    try{let r,j={};try{r=await fetch(API.replace(/\/sadakat$/,'/eposta'),{method:'POST',headers:{'content-type':'application/json',apikey:KEY,authorization:'Bearer '+KEY},body:JSON.stringify({action:'ret',token:tok})});j=await r.json()}catch(e){throw new Error('Bağlantı kurulamadı. İnternetinizi kontrol edip tekrar deneyin.')}
+      if(!r.ok||!j.ok)throw new Error(j.error||'İşlem yapılamadı');
+      app.innerHTML=`<div class="card"><h1 class="ok">Bildirimlerden çıktınız</h1><p class="sub"><b>${esc(j.email||'')}</b> adresine artık otomatik bilgilendirme e-postası gönderilmeyecek.</p></div>`}
+    catch(e){b.disabled=false;b.textContent='E-posta bildirimlerinden çık';$('err').textContent=e.message}}}
+const RET=(location.hash.match(/^#eposta-ret=([0-9a-f-]{36})$/i)||[])[1];
+if(RET)vRet(RET);else if(S.tok)load();else render();
 </script>
 </body>
 </html>
