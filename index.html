@@ -55,6 +55,8 @@ label{display:block;font-weight:600;font-size:13.5px;margin:12px 0 6px}
 .note{background:var(--warnbg);color:var(--warn);border-radius:10px;padding:10px 12px;font-size:13.5px;margin-top:10px}
 .ic{width:18px;height:18px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:18px}footer a{color:inherit}
+.sv-st{font-size:34px;line-height:1;background:none;border:0;color:var(--line);cursor:pointer;padding:2px 3px}.sv-st.on{color:#E2A33B}
+.sv-nps{display:grid;grid-template-columns:repeat(11,1fr);gap:4px}.sv-n{font:inherit;font-weight:600;padding:10px 0;border:1.5px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);cursor:pointer}.sv-n.on{background:var(--pink);border-color:var(--pink);color:#fff}
 .hidden{display:none!important}.center{text-align:center}
 .spin{width:22px;height:22px;border:3px solid color-mix(in srgb,var(--pink) 25%,transparent);border-top-color:var(--pink);border-radius:50%;animation:sp 0.8s linear infinite;margin:30px auto}@keyframes sp{to{transform:rotate(360deg)}}
 </style>
@@ -81,7 +83,7 @@ const IC={shield:'<path d="M12 3l7.5 3v5.5c0 4.6-3.2 8.3-7.5 9.5-4.3-1.2-7.5-4.9
   ref:'<path d="M20 11a8 8 0 1 0-2.3 5.7M20 5v6h-6"/>',clock:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>'};
 const ic=(n,c)=>`<svg class="ic${c?' '+c:''}" viewBox="0 0 24 24" aria-hidden="true">${IC[n]}</svg>`;
 const KIND={kazan:['Alışveriş puanı','pos'],hosgeldin:['Hoş geldin hediyesi','pos'],dogumgunu:['Doğum günü hediyesi','pos'],harca:['Puan kullanıldı','neg'],harca_iade:['İade: kullanılan puan geri yüklendi','pos'],
-  iade_geri:['İade: kazanılan puan geri alındı','neg'],iade_mahsup:['İade tutarından düşüldü',''],duzeltme:['Düzeltme',''],sure_doldu:['Süresi dolan puan','neg'],damga:['Damga kazanıldı',''],damga_geri:['İade: damga geri alındı','neg'],odul:['Damga ödülü kullanıldı','']};
+  iade_geri:['İade: kazanılan puan geri alındı','neg'],iade_mahsup:['İade tutarından düşüldü',''],duzeltme:['Düzeltme',''],sure_doldu:['Süresi dolan puan','neg'],damga:['Damga kazanıldı',''],damga_geri:['İade: damga geri alındı','neg'],odul:['Damga ödülü kullanıldı',''],anket:['Memnuniyet anketi teşekkür puanı','pos']};
 const S={step:'tel',phone:store.get(PK)||'',tok:store.get(TK),d:null,kasa:null,err:'',busy:false,cd:0};
 
 async function api(action,body){
@@ -189,8 +191,42 @@ function vRet(tok){app.innerHTML=`<div class="card"><h1>E-posta bildirimleri</h1
       if(!r.ok||!j.ok)throw new Error(j.error||'İşlem yapılamadı');
       app.innerHTML=`<div class="card"><h1 class="ok">Bildirimlerden çıktınız</h1><p class="sub"><b>${esc(j.email||'')}</b> adresine artık otomatik bilgilendirme e-postası gönderilmeyecek.</p></div>`}
     catch(e){b.disabled=false;b.textContent='E-posta bildirimlerinden çık';$('err').textContent=e.message}}}
-const RET=(location.hash.match(/^#eposta-ret=([0-9a-f-]{36})$/i)||[])[1];
-if(RET)vRet(RET);else if(S.tok)load();else render();
+// 094: memnuniyet anketi (#anket=<anahtar>) ve Google yorum yönlendirmesi (#yorum=<kayıt>&u=<bağlantı>)
+const SUPA=API.replace(/\/functions\/v1\/sadakat$/,'');
+async function rpcAnon(fn,args){let r;try{r=await fetch(SUPA+'/rest/v1/rpc/'+fn,{method:'POST',keepalive:true,headers:{'content-type':'application/json',apikey:KEY,authorization:'Bearer '+KEY},body:JSON.stringify(args)})}
+  catch(e){throw new Error('Bağlantı kurulamadı. İnternetinizi kontrol edip tekrar deneyin.')}
+  let j=null;try{j=await r.json()}catch(e){}if(!r.ok)throw new Error((j&&j.message)||'İşlem yapılamadı');return j}
+const GOK=u=>{try{const x=new URL(u);return x.protocol==='https:'&&/^(g\.page|search\.google\.com|www\.google\.com|maps\.google\.com|maps\.app\.goo\.gl|goo\.gl)$/.test(x.hostname)}catch(e){return false}};
+async function goReview(id,u){app.innerHTML='<div class="card center"><div class="spin"></div><p class="sub">Google yorum sayfasına yönlendiriliyorsunuz…</p></div>';
+  let url=GOK(u)?u:'';try{const r=await Promise.race([rpcAnon('review_click',{p_id:id}),new Promise((_,j)=>setTimeout(()=>j(new Error('t')),2500))]);if(GOK(r))url=r}catch(e){}
+  if(url)location.replace(url);else app.innerHTML='<div class="card"><p class="err">Bağlantı açılamadı. Lütfen Google Haritalar\'da "Anka İletişim" araması yaparak yorum bırakın.</p></div>'}
+const SV={d:null,score:0,staff:0,nps:null,busy:false,err:''};
+function stars(name,v,label){return `<label>${label}</label><div class="row" role="radiogroup" aria-label="${esc(label)}" style="gap:6px">${[1,2,3,4,5].map(i=>`<button type="button" class="sv-st${i<=v?' on':''}" data-sv="${name}" data-v="${i}" aria-label="${i} yıldız" aria-pressed="${i===v}">★</button>`).join('')}</div>`}
+function vSurvey(){const d=SV.d;
+  if(!d){app.innerHTML='<div class="spin"></div>';return}
+  if(!d.ok){app.innerHTML='<div class="card"><h1>Anket bulunamadı</h1><p class="sub">Bağlantı geçersiz. E-postadaki bağlantıyı yeniden açmayı deneyin.</p></div>';return}
+  if(d.done){app.innerHTML=`<div class="card center"><div style="font-size:44px">💝</div><h1>Teşekkür ederiz${d.ad?', '+esc(d.ad):''}!</h1><p class="sub">Görüşleriniz bize ulaştı.</p>
+    ${d.got?`<div class="card bal" style="margin-top:12px"><div class="k">Hesabınıza yüklendi</div><div class="v">+${num(d.got)}</div><div class="e">puan${d.avail!=null?` · kullanılabilir bakiye ${num(d.avail)} puan`:''}</div></div>`:''}</div>`;return}
+  if(d.answered){app.innerHTML=`<div class="card center"><h1>Teşekkür ederiz!</h1><p class="sub">Bu anketi daha önce doldurdunuz.</p></div>`;return}
+  if(d.expired){app.innerHTML=`<div class="card"><h1>Anketin süresi doldu</h1><p class="sub">Bu anketin süresi dolmuş. Görüşlerinizi mağazamıza her zaman iletebilirsiniz.</p></div>`;return}
+  app.innerHTML=`<div class="card"><h1>Alışverişinizi nasıl buldunuz?</h1><p class="sub">Merhaba ${esc(d.ad||'')}, ${d.sold_at?esc(dt(d.sold_at))+' tarihindeki ':''}alışverişinizi değerlendirin. Cevaplarınızı yalnızca ${esc(d.shop||'mağazamız')} görür.</p>
+    ${d.points?`<div class="note" style="background:var(--pinkbg);color:var(--pink)">Anketi tamamlayınca <b>${num(d.points)} puan</b> sadakat hesabınıza hemen yüklenir.</div>`:''}
+    ${stars('score',SV.score,'Genel olarak memnun kaldınız mı?')}
+    ${stars('staff',SV.staff,(d.staff?esc(d.staff)+' ':'Personelimizin ')+'ilgisi nasıldı? (isteğe bağlı)')}
+    <label>Bizi bir arkadaşınıza önerir misiniz? <span class="sub">(0 = hiç, 10 = kesinlikle)</span></label>
+    <div class="sv-nps">${Array.from({length:11},(_,i)=>`<button type="button" class="sv-n${SV.nps===i?' on':''}" data-sv="nps" data-v="${i}">${i}</button>`).join('')}</div>
+    <label for="sv-c">Eklemek istedikleriniz <span class="sub">(isteğe bağlı)</span></label><textarea class="in" id="sv-c" rows="3" maxlength="1000" style="font-size:16px" placeholder="Beğendikleriniz, geliştirmemizi istedikleriniz…">${esc(SV.c||'')}</textarea>
+    <button class="btn pri" id="sv-go" ${SV.busy?'disabled':''}>${SV.busy?'Gönderiliyor…':'Gönder'}</button><div class="err">${esc(SV.err)}</div></div>`;
+  app.querySelectorAll('[data-sv]').forEach(b=>b.onclick=()=>{SV.c=$('sv-c').value;const k=b.dataset.sv,v=+b.dataset.v;if(k==='nps')SV.nps=v;else SV[k]=v;SV.err='';vSurvey()});
+  $('sv-go').onclick=submitSurvey}
+async function submitSurvey(){SV.c=$('sv-c').value;if(!SV.score){SV.err='Lütfen genel memnuniyetinizi yıldızlarla belirtin.';return vSurvey()}
+  SV.busy=true;SV.err='';vSurvey();
+  try{const r=await rpcAnon('survey_submit',{p_token:SV.tok,p:{score:SV.score,staff_score:SV.staff||null,nps:SV.nps,comment:SV.c}});SV.d={...SV.d,done:true,got:r&&r.points,avail:r&&r.avail}}
+  catch(e){SV.err=e.message}SV.busy=false;vSurvey()}
+async function loadSurvey(tok){SV.tok=tok;vSurvey();try{SV.d=await rpcAnon('survey_get',{p_token:tok})}catch(e){SV.d={ok:false}}vSurvey()}
+const RET=(location.hash.match(/^#eposta-ret=([0-9a-f-]{36})$/i)||[])[1],ANK=(location.hash.match(/^#anket=([0-9a-f-]{36})$/i)||[])[1],
+  YRM=location.hash.match(/^#yorum=([0-9a-f-]{36})(?:&u=([^&]+))?$/i);
+if(YRM)goReview(YRM[1],YRM[2]?decodeURIComponent(YRM[2]):'');else if(ANK)loadSurvey(ANK);else if(RET)vRet(RET);else if(S.tok)load();else render();
 </script>
 </body>
 </html>
