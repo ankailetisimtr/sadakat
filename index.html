@@ -12,27 +12,27 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#F4F7FA;--card:#fff;--fg:#14212B;--muted:#5D6B78;--line:#DDE5EC;--pink:#C20C77;--pink2:#E2579F;--pinkbg:#FCEAF4;--ok:#1A8F4E;--okbg:#E6F5EC;--warn:#A86400;--warnbg:#FFF4DF;--bad:#C0362C;
+:root{--pinktx:#C20C77;--bg:#F4F7FA;--card:#fff;--fg:#14212B;--muted:#5D6B78;--line:#DDE5EC;--pink:#C20C77;--pink2:#E2579F;--pinkbg:#FCEAF4;--ok:#1A8F4E;--okbg:#E6F5EC;--warn:#A86400;--warnbg:#FFF4DF;--bad:#C0362C;
   --font:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--mono:'IBM Plex Mono',ui-monospace,monospace;--sh:0 1px 2px rgba(20,33,43,.06),0 6px 20px rgba(20,33,43,.06)}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0F171D;--card:#17222A;--fg:#E7EEF3;--muted:#98A7B3;--line:#28363F;--pinkbg:#3A1430;--okbg:#12301F;--warnbg:#3A2A10;--sh:none}}
-:root[data-theme="dark"]{--bg:#0F171D;--card:#17222A;--fg:#E7EEF3;--muted:#98A7B3;--line:#28363F;--pinkbg:#3A1430;--okbg:#12301F;--warnbg:#3A2A10;--sh:none}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0F171D;--card:#17222A;--fg:#E7EEF3;--muted:#98A7B3;--line:#28363F;--pinkbg:#3A1430;--okbg:#12301F;--warnbg:#3A2A10;--sh:none;--pinktx:#FF7AC2;--ok:#5ECB92;--warn:#E8B04A;--bad:#FF8A80}}
+:root[data-theme="dark"]{--bg:#0F171D;--card:#17222A;--fg:#E7EEF3;--muted:#98A7B3;--line:#28363F;--pinkbg:#3A1430;--okbg:#12301F;--warnbg:#3A2A10;--sh:none;--pinktx:#FF7AC2;--ok:#5ECB92;--warn:#E8B04A;--bad:#FF8A80}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.45;min-height:100dvh}
 .wrap{max-width:480px;margin:0 auto;padding:16px 16px calc(28px + env(safe-area-inset-bottom))}
 header{display:flex;align-items:center;gap:10px;padding:6px 0 14px}
 header .lg{height:30px;width:auto;display:block}.lg-d{display:none!important}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .lg-l{display:none!important}:root:not([data-theme="light"]) .lg-d{display:block!important}}
-header .t{margin-left:auto;font-weight:600;color:var(--pink);font-size:14px;display:flex;align-items:center;gap:6px}
+header .t{margin-left:auto;font-weight:600;color:var(--pinktx);font-size:14px;display:flex;align-items:center;gap:6px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--sh);margin-bottom:12px}
 h1{font-size:22px;margin:0 0 4px;letter-spacing:-.01em}h2{font-size:16px;margin:0 0 10px}
 .sub{color:var(--muted);font-size:13.5px}.mono{font-family:var(--mono)}
 label{display:block;font-weight:600;font-size:13.5px;margin:12px 0 6px}
 .in{width:100%;font:inherit;font-size:18px;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--fg);outline:none}
-.in:focus{border-color:var(--pink);box-shadow:0 0 0 3px color-mix(in srgb,var(--pink) 18%,transparent)}
+.in:focus{border-color:var(--pinktx);box-shadow:0 0 0 3px color-mix(in srgb,var(--pink) 18%,transparent)}
 .in.code{font-family:var(--mono);letter-spacing:.5em;text-align:center;font-size:26px;padding-left:calc(14px + .25em)}
 .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;font:inherit;font-weight:600;font-size:16px;padding:14px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer;margin-top:12px;text-decoration:none}
-.btn.pri{background:var(--pink);border-color:var(--pink);color:#fff}.btn:disabled{opacity:.55;cursor:default}
-.btn.lnk{border:0;background:none;color:var(--pink);padding:8px;margin-top:4px;font-size:14.5px;width:auto;display:inline-flex}
+.btn.pri{background:var(--pink);border-color:var(--pinktx);color:#fff}.btn:disabled{opacity:.55;cursor:default}
+.btn.lnk{border:0;background:none;color:var(--pinktx);padding:8px;margin-top:4px;font-size:14.5px;width:auto;display:inline-flex}
 .err{color:var(--bad);font-size:14px;margin-top:10px;font-weight:500}.err:empty{display:none}
 .ok{color:var(--ok)}.row{display:flex;align-items:center;gap:8px}.sp{flex:1}
 .bal{background:linear-gradient(135deg,var(--pink),#8E0A58);color:#fff;border:0;position:relative;overflow:hidden}
@@ -40,14 +40,14 @@ label{display:block;font-weight:600;font-size:13.5px;margin:12px 0 6px}
 .bal::after{content:"";position:absolute;right:-40px;top:-40px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.08)}
 .bal .pend{margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.22);font-size:13.5px}
 .kasa{border:2px solid var(--pink);background:var(--pinkbg)}
-.kasa .code{font-family:var(--mono);font-size:46px;font-weight:600;letter-spacing:.18em;text-align:center;color:var(--pink);margin:8px 0 4px}
+.kasa .code{font-family:var(--mono);font-size:46px;font-weight:600;letter-spacing:.18em;text-align:center;color:var(--pinktx);margin:8px 0 4px}
 .bar{height:6px;border-radius:6px;background:color-mix(in srgb,var(--pink) 18%,transparent);overflow:hidden;margin:10px 0 6px}.bar i{display:block;height:100%;background:var(--pink);transition:width 1s linear}
 .stamps{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:6px 0 8px}
 .dot{aspect-ratio:1;border-radius:50%;border:2px dashed color-mix(in srgb,var(--pink) 45%,var(--line));display:grid;place-items:center;font-weight:600;color:var(--muted);font-size:14px}
 .dot.on{background:var(--pink);border:2px solid var(--pink);color:#fff}.dot.rw{border-color:#E2A33B;border-style:solid}.dot.rw.on{background:#E2A33B;border-color:#E2A33B}
 .dot{display:flex;align-items:center;justify-content:center}.dot svg.ic{width:22px;height:22px;margin:0;display:block}
 .rw{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}.rw:first-of-type{border-top:0}
-.wr{padding:12px 0;border-top:1px solid var(--line)}.wr:first-of-type{border-top:0;padding-top:4px}.wr .left{font-size:30px;font-weight:700;color:var(--pink);line-height:1}.wr .parts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.wr .pt{font-size:13px;padding:3px 9px;border-radius:999px;background:var(--pinkbg);color:var(--fg)}.wr .pt.off{background:transparent;border:1px dashed var(--line);color:var(--muted)}
+.wr{padding:12px 0;border-top:1px solid var(--line)}.wr:first-of-type{border-top:0;padding-top:4px}.wr .left{font-size:30px;font-weight:700;color:var(--pinktx);line-height:1}.wr .parts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.wr .pt{font-size:13px;padding:3px 9px;border-radius:999px;background:var(--pinkbg);color:var(--fg)}.wr .pt.off{background:transparent;border:1px dashed var(--line);color:var(--muted)}
 .pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--okbg);color:var(--ok)}.pill.w{background:var(--warnbg);color:var(--warn)}
 .hist{list-style:none;margin:0;padding:0}.hist li{display:flex;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:14px}.hist li:first-child{border-top:0}
 .hist .p{margin-left:auto;font-weight:600;white-space:nowrap}.pos{color:var(--ok)}.neg{color:var(--bad)}
@@ -56,9 +56,9 @@ label{display:block;font-weight:600;font-size:13.5px;margin:12px 0 6px}
 .ic{width:18px;height:18px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:18px}footer a{color:inherit}
 .sv-st{font-size:34px;line-height:1;background:none;border:0;color:var(--line);cursor:pointer;padding:2px 3px}.sv-st.on{color:#E2A33B}
-.sv-nps{display:grid;grid-template-columns:repeat(11,1fr);gap:4px}.sv-n{font:inherit;font-weight:600;padding:10px 0;border:1.5px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);cursor:pointer}.sv-n.on{background:var(--pink);border-color:var(--pink);color:#fff}
+.sv-nps{display:grid;grid-template-columns:repeat(11,1fr);gap:4px}.sv-n{font:inherit;font-weight:600;padding:10px 0;border:1.5px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);cursor:pointer}.sv-n.on{background:var(--pink);border-color:var(--pinktx);color:#fff}
 .hidden{display:none!important}.center{text-align:center}
-.spin{width:22px;height:22px;border:3px solid color-mix(in srgb,var(--pink) 25%,transparent);border-top-color:var(--pink);border-radius:50%;animation:sp 0.8s linear infinite;margin:30px auto}@keyframes sp{to{transform:rotate(360deg)}}
+.spin{width:22px;height:22px;border:3px solid color-mix(in srgb,var(--pink) 25%,transparent);border-top-color:var(--pinktx);border-radius:50%;animation:sp 0.8s linear infinite;margin:30px auto}@keyframes sp{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
@@ -177,7 +177,7 @@ function vHome(){const d=S.d;if(d.err&&!d.name){app.innerHTML=`<div class="card"
   <div class="card"><div class="row"><div><b>${esc(d.shop&&d.shop.name||'Anka İletişim')}</b>${d.shop&&d.shop.phone?`<div class="sub">${esc(d.shop.phone)}</div>`:''}</div><span class="sp"></span>
     ${d.shop&&d.shop.phone?`<a class="btn" style="width:auto;margin:0;padding:10px 14px" href="tel:${esc(String(d.shop.phone).replace(/[^\d+]/g,''))}">Ara</a>`:''}</div>
     ${d.shop&&d.shop.address?`<div class="sub" style="margin-top:6px">${esc(d.shop.address)}</div>`:''}${d.shop&&d.shop.hours?`<div class="sub" style="margin-top:4px">${ic('clock')} ${esc(d.shop.hours)}</div>`:''}
-    ${d.shop&&(d.shop.web||d.shop.instagram)?`<div class="sub" style="margin-top:4px">${d.shop.web?`<a href="${esc(d.shop.web)}" target="_blank" rel="noopener" style="color:var(--pink)">${esc(String(d.shop.web).replace(/^https?:\/\//,'').replace(/\/$/,''))}</a>`:''}${d.shop.web&&d.shop.instagram?' · ':''}${d.shop.instagram?`<a href="https://instagram.com/${esc(String(d.shop.instagram).replace(/^@/,''))}" target="_blank" rel="noopener" style="color:var(--pink)">Instagram ${esc(d.shop.instagram)}</a>`:''}</div>`:''}</div>
+    ${d.shop&&(d.shop.web||d.shop.instagram)?`<div class="sub" style="margin-top:4px">${d.shop.web?`<a href="${esc(d.shop.web)}" target="_blank" rel="noopener" style="color:var(--pinktx)">${esc(String(d.shop.web).replace(/^https?:\/\//,'').replace(/\/$/,''))}</a>`:''}${d.shop.web&&d.shop.instagram?' · ':''}${d.shop.instagram?`<a href="https://instagram.com/${esc(String(d.shop.instagram).replace(/^@/,''))}" target="_blank" rel="noopener" style="color:var(--pinktx)">Instagram ${esc(d.shop.instagram)}</a>`:''}</div>`:''}</div>
   <div class="err center">${esc(S.err)}</div>
   <div class="center"><span class="sub">${esc(d.phone)} · üyelik ${dt(d.joined_at)}</span><br><button class="btn lnk" id="lo">${ic('out')} Çıkış yap</button></div>`;
   $('ref').onclick=load;$('lo').onclick=()=>logout();const g=$('kget')||$('knew');if(g)g.onclick=()=>getKasa(g);if(k)tickKasa()}
@@ -211,7 +211,7 @@ function vSurvey(){const d=SV.d;
   if(d.answered){app.innerHTML=`<div class="card center"><h1>Teşekkür ederiz!</h1><p class="sub">Bu anketi daha önce doldurdunuz.</p></div>`;return}
   if(d.expired){app.innerHTML=`<div class="card"><h1>Anketin süresi doldu</h1><p class="sub">Bu anketin süresi dolmuş. Görüşlerinizi mağazamıza her zaman iletebilirsiniz.</p></div>`;return}
   app.innerHTML=`<div class="card"><h1>Alışverişinizi nasıl buldunuz?</h1><p class="sub">Merhaba ${esc(d.ad||'')}, ${d.sold_at?esc(dt(d.sold_at))+' tarihindeki ':''}alışverişinizi değerlendirin. Cevaplarınızı yalnızca ${esc(d.shop||'mağazamız')} görür.</p>
-    ${d.points?`<div class="note" style="background:var(--pinkbg);color:var(--pink)">Anketi tamamlayınca <b>${num(d.points)} puan</b> sadakat hesabınıza hemen yüklenir.</div>`:''}
+    ${d.points?`<div class="note" style="background:var(--pinkbg);color:var(--pinktx)">Anketi tamamlayınca <b>${num(d.points)} puan</b> sadakat hesabınıza hemen yüklenir.</div>`:''}
     ${stars('score',SV.score,'Genel olarak memnun kaldınız mı?')}
     ${stars('staff',SV.staff,(d.staff?esc(d.staff)+' ':'Personelimizin ')+'ilgisi nasıldı? (isteğe bağlı)')}
     <label>Bizi bir arkadaşınıza önerir misiniz? <span class="sub">(0 = hiç, 10 = kesinlikle)</span></label>
