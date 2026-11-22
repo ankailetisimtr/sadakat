@@ -176,7 +176,8 @@ function vHome(){const d=S.d;if(d.err&&!d.name){app.innerHTML=`<div class="card"
       return `<li><div><div>${esc(K[0])}</div><div class="sub">${dt(h.at)}</div></div><span class="p ${h.points>0||h.stamps>0?'pos':h.points<0||h.stamps<0?'neg':''}">${v}</span></li>`}).join('')}</ul>`:'<p class="sub">Henüz hareket yok.</p>'}</div>
   <div class="card"><div class="row"><div><b>${esc(d.shop&&d.shop.name||'Anka İletişim')}</b>${d.shop&&d.shop.phone?`<div class="sub">${esc(d.shop.phone)}</div>`:''}</div><span class="sp"></span>
     ${d.shop&&d.shop.phone?`<a class="btn" style="width:auto;margin:0;padding:10px 14px" href="tel:${esc(String(d.shop.phone).replace(/[^\d+]/g,''))}">Ara</a>`:''}</div>
-    ${d.shop&&d.shop.address?`<div class="sub" style="margin-top:6px">${esc(d.shop.address)}</div>`:''}</div>
+    ${d.shop&&d.shop.address?`<div class="sub" style="margin-top:6px">${esc(d.shop.address)}</div>`:''}${d.shop&&d.shop.hours?`<div class="sub" style="margin-top:4px">${ic('clock')} ${esc(d.shop.hours)}</div>`:''}
+    ${d.shop&&(d.shop.web||d.shop.instagram)?`<div class="sub" style="margin-top:4px">${d.shop.web?`<a href="${esc(d.shop.web)}" target="_blank" rel="noopener" style="color:var(--pink)">${esc(String(d.shop.web).replace(/^https?:\/\//,'').replace(/\/$/,''))}</a>`:''}${d.shop.web&&d.shop.instagram?' · ':''}${d.shop.instagram?`<a href="https://instagram.com/${esc(String(d.shop.instagram).replace(/^@/,''))}" target="_blank" rel="noopener" style="color:var(--pink)">Instagram ${esc(d.shop.instagram)}</a>`:''}</div>`:''}</div>
   <div class="err center">${esc(S.err)}</div>
   <div class="center"><span class="sub">${esc(d.phone)} · üyelik ${dt(d.joined_at)}</span><br><button class="btn lnk" id="lo">${ic('out')} Çıkış yap</button></div>`;
   $('ref').onclick=load;$('lo').onclick=()=>logout();const g=$('kget')||$('knew');if(g)g.onclick=()=>getKasa(g);if(k)tickKasa()}
