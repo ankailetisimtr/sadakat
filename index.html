@@ -60,6 +60,16 @@ footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:18px}foo
 .pv-sw{display:flex;gap:10px;align-items:flex-start;font-weight:400;margin:10px 0;cursor:pointer}.pv-sw input{width:22px;height:22px;margin:1px 0 0;accent-color:var(--pink);flex:none}.pv-sw b{display:block;font-size:14.5px}.pv-sw .sub{display:block}
 .hidden{display:none!important}.center{text-align:center}
 .spin{width:22px;height:22px;border:3px solid color-mix(in srgb,var(--pink) 25%,transparent);border-top-color:var(--pinktx);border-radius:50%;animation:sp 0.8s linear infinite;margin:30px auto}@keyframes sp{to{transform:rotate(360deg)}}
+.fs-l{list-style:none;margin:8px 0 0;padding:0}.fs-l li{border-top:1px solid var(--line)}.fs-l li:first-child{border-top:0}
+.fs-i{display:flex;gap:10px;align-items:center;width:100%;background:none;border:0;padding:11px 0;font:inherit;color:inherit;text-align:left;cursor:pointer}
+.fs-t{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fs-v{font-weight:700;white-space:nowrap}.fs-a{color:var(--muted);margin-left:6px;font-weight:400}
+.fs-bar{margin:-4px 0 6px}.rc-h{margin:14px 0 6px;padding:10px 0;border-top:1px dashed var(--line);border-bottom:1px dashed var(--line)}
+.rc-kv{display:flex;justify-content:space-between;gap:10px;padding:3px 0;font-size:14px}.rc-kv span{color:var(--muted)}.rc-kv.big{font-size:19px;border-top:2px solid var(--fg);margin-top:6px;padding-top:8px}.rc-kv.big span{color:var(--fg);font-weight:700}
+.rc-kv.save{background:var(--pinkbg);border-radius:8px;padding:6px 10px;margin:4px 0}.rc-kv.save span,.rc-kv.save b{color:var(--pinktx)}.rc-kv.pos b{color:var(--ok)}.rc-kv.neg b{color:var(--bad)}
+.rc-ln{display:flex;gap:10px;padding:9px 0;border-top:1px solid var(--line)}.rc-ln:first-child{border-top:0}.rc-ln.ret b{text-decoration:line-through;color:var(--muted)}.rc-amt{white-space:nowrap}
+.rc-tot{border-top:1px solid var(--line);margin-top:4px;padding-top:6px}.rc-sec{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:14px 0 4px}
+.lnk2{color:var(--pinktx);font-weight:600;white-space:nowrap}
+@media print{:root,:root[data-theme="dark"]{--fg:#111!important;--muted:#555!important;--card:#fff!important;--line:#ddd!important;--bg:#fff!important;--pinktx:#C20C77!important;--pinkbg:#FCEAF4!important}header,footer,.fs-bar{display:none!important}body{background:#fff}.card.rc{border:0;box-shadow:none;padding:0}.wrap{max-width:none}}
 </style>
 </head>
 <body>
@@ -81,7 +91,7 @@ const phoneOk=p=>{let d=String(p||'').replace(/\D/g,'');if(d.startsWith('90')&&d
 const phoneTxt=d=>'0'+d.slice(0,3)+' '+d.slice(3,6)+' '+d.slice(6,8)+' '+d.slice(8);
 const IC={shield:'<path d="M12 3l7.5 3v5.5c0 4.6-3.2 8.3-7.5 9.5-4.3-1.2-7.5-4.9-7.5-9.5V6z"/><path d="M8.8 12.2l2.2 2.2 4.3-4.6"/>',gift:'<rect x="3.5" y="8" width="17" height="4" rx="1"/><path d="M5 12v8h14v-8M12 8v12M12 8c-1.5-3-5-3.5-5-1.2C7 8 9.5 8 12 8zm0 0c1.5-3 5-3.5 5-1.2C17 8 14.5 8 12 8z"/>',
   sms:'<rect x="3.5" y="4.5" width="17" height="12" rx="2.5"/><path d="M8 20l3-3.5M7.5 9h9M7.5 12h6"/>',key:'<circle cx="8" cy="15" r="4"/><path d="m11 12 8-8M16 7l2 2"/>',out:'<path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"/>',
-  ref:'<path d="M20 11a8 8 0 1 0-2.3 5.7M20 5v6h-6"/>',lock:'<rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/>',clock:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>'};
+  ref:'<path d="M20 11a8 8 0 1 0-2.3 5.7M20 5v6h-6"/>',lock:'<rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/>',clock:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',rcpt:'<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6M9 16h3"/>',back:'<path d="M15 5l-7 7 7 7"/>',print:'<path d="M7 9V3h10v6"/><rect x="3.5" y="9" width="17" height="8" rx="2"/><path d="M7 14h10v7H7z"/>'};
 const ic=(n,c)=>`<svg class="ic${c?' '+c:''}" viewBox="0 0 24 24" aria-hidden="true">${IC[n]}</svg>`;
 const KIND={kazan:['Alışveriş puanı','pos'],hosgeldin:['Hoş geldin hediyesi','pos'],dogumgunu:['Doğum günü hediyesi','pos'],harca:['Puan kullanıldı','neg'],harca_iade:['İade: kullanılan puan geri yüklendi','pos'],
   iade_geri:['İade: kazanılan puan geri alındı','neg'],iade_mahsup:['İade tutarından düşüldü',''],duzeltme:['Düzeltme',''],sure_doldu:['Süresi dolan puan','neg'],damga:['Damga kazanıldı',''],damga_geri:['İade: damga geri alındı','neg'],odul:['Damga ödülü kullanıldı',''],anket:['Memnuniyet anketi teşekkür puanı','pos']};
@@ -95,7 +105,7 @@ async function api(action,body){
   if(!r.ok)throw new Error(j.error||'İşlem yapılamadı ('+r.status+')');return j}
 
 function render(){
-  if(S.step==='tel')return vTel();if(S.step==='kod')return vKod();if(!S.d){app.innerHTML='<div class="spin"></div>';return}return vHome()}
+  if(S.step==='tel')return vTel();if(S.step==='kod')return vKod();if(!S.d){app.innerHTML='<div class="spin"></div>';return}if(FS.rc)return vFis();return vHome()}
 
 function vTel(){app.innerHTML=`<div class="card"><h1>Hoş geldiniz</h1><p class="sub">Puan bakiyenizi, damga kartınızı görmek ve kasada puan kullanmak için mağazada üye olduğunuz cep numarasını yazın. Doğrulama kodu <b>SMS</b> ile gelir.</p>
   <label for="tel">Cep telefonu</label><input class="in" id="tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="05XX XXX XX XX" value="${esc(S.phone?phoneTxt(S.phone):'')}">
@@ -123,9 +133,10 @@ async function login(){const c=$('code').value.replace(/\D/g,'');if(c.length!==6
   try{const r=await api('portal_giris',{phone:S.phone,code:c});S.tok=r.token;store.set(TK,r.token);S.step='home';S.busy=false;await load()}catch(e){S.err=e.message;S.busy=false;render()}}
 
 async function load(){if(!S.tok){S.step='tel';return render()}S.step='home';render();
-  try{S.d=await api('portal_bilgi',{token:S.tok});S.err=''}catch(e){if(S.step==='home'){S.err=e.message;S.d=S.d||{err:true}}}render()}
+  try{S.d=await api('portal_bilgi',{token:S.tok});S.err=''}catch(e){if(S.step==='home'){S.err=e.message;S.d=S.d||{err:true}}}render();
+  if(S.d&&!S.d.err)fsLoad()}
 
-function logout(silent){if(!silent&&S.tok)api('portal_cikis',{token:S.tok}).catch(()=>{});S.tok=null;store.set(TK,null);S.d=null;S.kasa=null;clearInterval(kT);S.step='tel';S.err='';if(!silent)render()}
+function logout(silent){if(!silent&&S.tok)api('portal_cikis',{token:S.tok}).catch(()=>{});S.tok=null;store.set(TK,null);S.d=null;S.kasa=null;FS.list=null;FS.rc=null;clearInterval(kT);S.step='tel';S.err='';if(!silent)render()}
 
 let kT=null;
 async function getKasa(btn){btn.disabled=true;try{S.kasa=await api('portal_kasa',{token:S.tok});S.kasa.until=Date.now()+S.kasa.ttl*60000;tickKasa()}catch(e){alertBox(e.message)}btn.disabled=false;render()}
@@ -141,6 +152,47 @@ function wrCard(L){if(!Array.isArray(L)||!L.length)return '';
       <div class="parts">${(w.parts||[]).map(p=>`<span class="pt${p.applied?'':' off'}">${esc(p.name)}${pp?` · ${num(Math.max(0,(w.limit||0)-(p.used||0)))} hak`:''}${p.applied?'':' · ilk takma bekliyor'}</span>`).join('')}</div>
       <div class="sub" style="margin-top:8px">Bu yıl ${num(w.used)}/${num(w.limit)} değişim kullanıldı${pp?' (parça başına)':''} · haklar ${dt(w.period_end)} tarihinde yenilenir${w.last_claim?` · son değişim ${dts(w.last_claim)}`:''}</div></div>`}).join('')}
     <div class="sub" style="margin-top:6px">Garanti yalnız sizin adınıza ve kayıtlı cihaz için geçerlidir; devredilemez. Değişim için cihazınızla mağazamıza gelin.</div></div>`}
+// 125: Fişlerim — mağazadaki alışverişler ve fiş ayrıntısı
+const FS={list:null,busy:false,err:'',rc:null,rcBusy:false,y:0};
+const PAYN={nakit:'Nakit',pos:'Kredi / banka kartı',havale:'Havale / EFT',hediye_ceki:'Hediye çeki'};
+const dtt=s=>s?new Date(s).toLocaleString('tr-TR',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'}):'';
+async function fsLoad(more){if(FS.busy)return;FS.busy=true;FS.err='';if(more)render();
+  try{const L=FS.list,before=more&&L&&L.items.length?L.items[L.items.length-1].at:undefined;
+    const r=await api('portal_fisler',{token:S.tok,limit:more?10:5,...(before?{before}:{})});
+    FS.list=more&&L?{...r,items:L.items.concat(r.items||[])}:r}
+  catch(e){if(!more)FS.list=null;else FS.err=e.message}   // eski sunucu fonksiyonunda kart hiç görünmez
+  FS.busy=false;if(S.step==='home'&&!FS.rc)render()}
+function fsCard(){const L=FS.list;if(!L||!Array.isArray(L.items))return '';
+  return `<div class="card" id="fs"><div class="row"><h2 style="margin:0">${ic('rcpt')} Fişlerim</h2><span class="sp"></span><span class="sub">${num(L.total||0)} alışveriş</span></div>
+   ${L.items.length?`<ul class="fs-l">${L.items.map(x=>`<li><button class="fs-i" data-fis="${esc(x.id)}"><div style="min-width:0;flex:1"><div class="fs-t">${esc(x.items||'Alışveriş')}</div>
+      <div class="sub">${dt(x.at)} · ${esc(x.no)}${x.partial?' · <span class="pill w">kısmi iade</span>':''}${x.earned>0?` · <span class="pos">+${num(x.earned)} puan</span>`:''}${x.spent>0?` · ${num(x.spent)} puan kullanıldı`:''}</div></div>
+      <div class="fs-v">${money(x.total)}<span class="fs-a">›</span></div></button></li>`).join('')}</ul>`:'<p class="sub" style="margin:8px 0 0">Henüz mağazamızda alışverişiniz görünmüyor.</p>'}
+   ${L.more?`<button class="btn" id="fs-more" ${FS.busy?'disabled':''}>${FS.busy?'Yükleniyor…':'Daha eski fişleri göster'}</button>`:''}<div class="err">${esc(FS.err)}</div></div>`}
+function fsBind(){document.querySelectorAll('[data-fis]').forEach(b=>b.onclick=()=>fsOpen(b.dataset.fis));const m=$('fs-more');if(m)m.onclick=()=>fsLoad(true)}
+async function fsOpen(id){if(FS.rcBusy)return;FS.rcBusy=true;FS.y=window.scrollY;FS.rc={loading:true};render();window.scrollTo(0,0);
+  try{FS.rc=await api('portal_fis',{token:S.tok,id})}catch(e){FS.rc={error:e.message}}FS.rcBusy=false;if(FS.rc)render()}
+function fsClose(){FS.rc=null;render();window.scrollTo(0,FS.y||0)}
+function vFis(){const d=FS.rc;
+  if(d.loading){app.innerHTML='<div class="spin"></div>';return}
+  const back=`<div class="row fs-bar"><button class="btn lnk" id="fs-back">${ic('back')} Geri</button><span class="sp"></span>${d.error?'':`<button class="btn lnk" id="fs-print">${ic('print')} Yazdır / PDF</button>`}</div>`;
+  if(d.error){app.innerHTML=back+`<div class="card"><p class="err">${esc(d.error)}</p></div>`;$('fs-back').onclick=fsClose;return}
+  const sh=d.shop||{},L=d.lines||[],ly=d.loyalty;
+  const line=l=>`<div class="rc-ln${l.returned?' ret':''}"><div style="min-width:0;flex:1"><b>${esc(l.name)}</b>${l.detail?`<div class="sub">${esc(l.detail)}</div>`:''}${Number(l.qty)>1?`<div class="sub">${num(l.qty)} × ${money(l.unit)}</div>`:''}${l.returned?'<div class="neg" style="font-size:13px;font-weight:600">İade edildi</div>':''}</div><b class="rc-amt">${money(l.amount)}</b></div>`;
+  const kv=(k,v,c)=>`<div class="rc-kv${c?' '+c:''}"><span>${k}</span><b>${v}</b></div>`;
+  app.innerHTML=back+`<div class="card rc">
+   <div class="center"><b style="font-size:17px">${esc(sh.name||'Anka İletişim')}</b>${sh.address?`<div class="sub">${esc(sh.address)}</div>`:''}
+    <div class="sub">${[sh.phone,sh.email].filter(Boolean).map(esc).join(' · ')}</div>${sh.tax_no?`<div class="sub">${esc([sh.tax_office,sh.tax_no?'VKN '+sh.tax_no:''].filter(Boolean).join(' · '))}</div>`:''}</div>
+   <div class="rc-h"><div>${kv('Fiş no','<span class="mono">'+esc(d.sale_no)+'</span>')}${kv('Tarih',esc(dtt(d.sold_at)))}${d.staff?kv('Satışı yapan',esc(d.staff)):''}</div></div>
+   <div class="rc-ls">${L.map(line).join('')}</div>
+   <div class="rc-tot">${kv('Ara toplam',money(d.subtotal))}${Number(d.save)>0?kv('Tasarrufunuz','−'+money(d.save),'save'):''}
+    ${(d.trades||[]).map(t=>kv('Takas: '+esc(t.name),'−'+money(t.value))).join('')}${kv('TOPLAM',money(d.total),'big')}</div>
+   ${(d.pays||[]).length?`<div class="rc-sec">Ödeme</div>${d.pays.map(p=>kv(esc(PAYN[p.method]||p.method)+(p.card?' · '+esc(p.card):''),money(p.amount))).join('')}${Number(d.rest)>0.5?kv('Kalan',money(d.rest)):''}`:''}
+   ${Number(d.returns)>0?kv('İade edilen tutar',money(d.returns),'neg'):''}
+   ${ly&&(ly.earned||ly.spent||ly.stamp)?`<div class="rc-sec">Sadakat</div>${ly.spent?kv('Kullanılan puan','−'+num(ly.spent)):''}${ly.earned?kv('Kazanılan puan','+'+num(ly.earned),'pos'):''}${ly.stamp?kv('Damga','+1'):''}${ly.earned?`<div class="sub">Puanlar alışverişten ${num(ly.wait_days)} gün sonra kullanılabilir.</div>`:''}`:''}
+   ${(d.warranties||[]).length?`<div class="rc-sec">Garanti belgesi</div>${d.warranties.map(w=>`<div class="rc-kv"><span>${esc(w.model)} · ${esc(w.cert_no)}<div class="sub">${num(w.months)} ay · ${dt(w.end_date)} tarihine kadar</div></span>${w.url?`<a class="lnk2" href="${esc(w.url)}" target="_blank" rel="noopener">Belgeyi aç</a>`:''}</div>`).join('')}`:''}
+   ${d.receipt_note?`<p class="sub center" style="margin-top:14px">${esc(d.receipt_note)}</p>`:''}
+   <p class="sub center" style="font-size:12px;margin:10px 0 0">Bu belge bilgi fişidir; mali belge (fatura / e-arşiv / yazarkasa fişi) yerine geçmez.</p></div>`;
+  $('fs-back').onclick=fsClose;$('fs-print').onclick=()=>window.print()}
 // 121: gizlilik ve izinler
 const PV={del:false,busy:false,msg:'',err:''};
 const KVS={yeni:['İnceleniyor','w'],tamamlandi:['Tamamlandı',''],reddedildi:['Reddedildi','w'],iptal:['İptal edildi','w']};
@@ -199,6 +251,7 @@ function vHome(){const d=S.d;if(d.err&&!d.name){app.innerHTML=`<div class="card"
     ${(R.stamp_rewards||[]).length?`<div class="sub" style="margin-top:4px">${R.stamp_rewards.map(x=>`${num(x.at)}. damga: ${esc(rwTxt(x))}`).join(' · ')}</div>`:''}</div>`:''}
   ${(d.rewards||[]).length?`<div class="card"><h2>Ödülleriniz</h2>${d.rewards.map(r=>`<div class="rw">${ic('gift')}<div><b>${num(r.at)}. damga ödülü</b> · ${esc(rwTxt(r))}<div class="sub">${r.ready?'<span class="pill">Kullanılabilir</span> Kasada kasa koduyla kullanın.':`<span class="pill w">${dts(r.avail_at)} tarihinden sonra</span>`}</div></div></div>`).join('')}</div>`:''}
   ${wrCard(d.warranties)}
+  ${fsCard()}
   <div class="card"><h2>Nasıl kazanırım?</h2><ul class="rules">
     ${R.mode==='sabit'?`<li>Her ${money(R.fix_amount)} alışverişe ${num(R.fix_points)} puan</li>`:`<li>Cihaz alışverişlerinde <b>%${num(R.pct_dev)}</b>, aksesuarda <b>%${num(R.pct_acc)}</b>, hizmetlerde <b>%${num(R.pct_svc)}</b> puan</li>`}
     <li>Puanlar alışverişten ${num(R.wait_days)} gün sonra kullanılabilir</li>
@@ -215,7 +268,7 @@ function vHome(){const d=S.d;if(d.err&&!d.name){app.innerHTML=`<div class="card"
     ${d.shop&&(d.shop.web||d.shop.instagram)?`<div class="sub" style="margin-top:4px">${d.shop.web?`<a href="${esc(d.shop.web)}" target="_blank" rel="noopener" style="color:var(--pinktx)">${esc(String(d.shop.web).replace(/^https?:\/\//,'').replace(/\/$/,''))}</a>`:''}${d.shop.web&&d.shop.instagram?' · ':''}${d.shop.instagram?`<a href="https://instagram.com/${esc(String(d.shop.instagram).replace(/^@/,''))}" target="_blank" rel="noopener" style="color:var(--pinktx)">Instagram ${esc(d.shop.instagram)}</a>`:''}</div>`:''}</div>
   <div class="err center">${esc(S.err)}</div>
   <div class="center"><span class="sub">${esc(d.phone)} · üyelik ${dt(d.joined_at)}</span><br><button class="btn lnk" id="lo">${ic('out')} Çıkış yap</button></div>`;
-  $('ref').onclick=load;$('lo').onclick=()=>logout();pvBind();const g=$('kget')||$('knew');if(g)g.onclick=()=>getKasa(g);if(k)tickKasa()}
+  $('ref').onclick=load;$('lo').onclick=()=>logout();pvBind();fsBind();const g=$('kget')||$('knew');if(g)g.onclick=()=>getKasa(g);if(k)tickKasa()}
 
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&S.step==='home'&&S.tok&&!S.kasa)load()});
 // 093: e-postadaki "bildirimlerden çık" bağlantısı (#eposta-ret=<anahtar>)
