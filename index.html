@@ -53,6 +53,7 @@ label{display:block;font-weight:600;font-size:13.5px;margin:12px 0 6px}
 .hist .p{margin-left:auto;font-weight:600;white-space:nowrap}.pos{color:var(--ok)}.neg{color:var(--bad)}
 .rules li{margin:5px 0}.rules{padding-left:18px;margin:6px 0}
 .note{background:var(--warnbg);color:var(--warn);border-radius:10px;padding:10px 12px;font-size:13.5px;margin-top:10px}
+.sv-demo{margin:0 0 14px;background:var(--pinkbg);color:var(--pinktx)}.sv-demo b{color:inherit}
 .ic{width:18px;height:18px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:18px}footer a{color:inherit}
 .sv-st{font-size:34px;line-height:1;background:none;border:0;color:var(--line);cursor:pointer;padding:2px 3px}.sv-st.on{color:#E2A33B}
@@ -290,15 +291,19 @@ async function goReview(id,u){app.innerHTML='<div class="card center"><div class
   let url=GOK(u)?u:'';try{const r=await Promise.race([rpcAnon('review_click',{p_id:id}),new Promise((_,j)=>setTimeout(()=>j(new Error('t')),2500))]);if(GOK(r))url=r}catch(e){}
   if(url)location.replace(url);else app.innerHTML='<div class="card"><p class="err">Bağlantı açılamadı. Lütfen Google Haritalar\'da "Anka İletişim" araması yaparak yorum bırakın.</p></div>'}
 const SV={d:null,score:0,staff:0,nps:null,busy:false,err:''};
+// e-posta "Deneme gönder" bağlantısı (CepOS › E-posta bildirimleri): sıfır anahtar → örnek anket; cevap sunucuya gönderilmez
+const SV_DEMO='00000000-0000-0000-0000-000000000000';
 function stars(name,v,label){return `<label>${label}</label><div class="row" role="radiogroup" aria-label="${esc(label)}" style="gap:6px">${[1,2,3,4,5].map(i=>`<button type="button" class="sv-st${i<=v?' on':''}" data-sv="${name}" data-v="${i}" aria-label="${i} yıldız" aria-pressed="${i===v}">★</button>`).join('')}</div>`}
 function vSurvey(){const d=SV.d;
   if(!d){app.innerHTML='<div class="spin"></div>';return}
   if(!d.ok){app.innerHTML='<div class="card"><h1>Anket bulunamadı</h1><p class="sub">Bağlantı geçersiz. E-postadaki bağlantıyı yeniden açmayı deneyin.</p></div>';return}
+  const demo=d.demo?`<div class="note sv-demo"><b>Deneme e-postası</b> · Bu, CepOS'tan gönderilen deneme e-postasının örnek anketidir. Müşterinin göreceği ekran budur; burada verilen cevaplar kaydedilmez, puan yüklenmez.</div>`:'';
+  if(d.done&&d.demo){app.innerHTML=`<div class="card center"><div style="font-size:44px">💝</div><h1>Teşekkür ederiz!</h1><p class="sub">Müşteriniz anketi gönderince bu teşekkür ekranını görür${d.points?' ve puanı hesabına hemen yüklenir':''}.</p>${demo}</div>`;return}
   if(d.done){app.innerHTML=`<div class="card center"><div style="font-size:44px">💝</div><h1>Teşekkür ederiz${d.ad?', '+esc(d.ad):''}!</h1><p class="sub">Görüşleriniz bize ulaştı.</p>
     ${d.got?`<div class="card bal" style="margin-top:12px"><div class="k">Hesabınıza yüklendi</div><div class="v">+${num(d.got)}</div><div class="e">puan${d.avail!=null?` · kullanılabilir bakiye ${num(d.avail)} puan`:''}</div></div>`:''}</div>`;return}
   if(d.answered){app.innerHTML=`<div class="card center"><h1>Teşekkür ederiz!</h1><p class="sub">Bu anketi daha önce doldurdunuz.</p></div>`;return}
   if(d.expired){app.innerHTML=`<div class="card"><h1>Anketin süresi doldu</h1><p class="sub">Bu anketin süresi dolmuş. Görüşlerinizi mağazamıza her zaman iletebilirsiniz.</p></div>`;return}
-  app.innerHTML=`<div class="card"><h1>Alışverişinizi nasıl buldunuz?</h1><p class="sub">Merhaba ${esc(d.ad||'')}, ${d.sold_at?esc(dt(d.sold_at))+' tarihindeki ':''}alışverişinizi değerlendirin. Cevaplarınızı yalnızca ${esc(d.shop||'mağazamız')} görür.</p>
+  app.innerHTML=`<div class="card">${demo}<h1>Alışverişinizi nasıl buldunuz?</h1><p class="sub">Merhaba ${esc(d.ad||'')}, ${d.sold_at?esc(dt(d.sold_at))+' tarihindeki ':''}alışverişinizi değerlendirin. Cevaplarınızı yalnızca ${esc(d.shop||'mağazamız')} görür.</p>
     ${d.points?`<div class="note" style="background:var(--pinkbg);color:var(--pinktx)">Anketi tamamlayınca <b>${num(d.points)} puan</b> sadakat hesabınıza hemen yüklenir.</div>`:''}
     ${stars('score',SV.score,'Genel olarak memnun kaldınız mı?')}
     ${stars('staff',SV.staff,(d.staff?esc(d.staff)+' ':'Personelimizin ')+'ilgisi nasıldı? (isteğe bağlı)')}
@@ -309,10 +314,11 @@ function vSurvey(){const d=SV.d;
   app.querySelectorAll('[data-sv]').forEach(b=>b.onclick=()=>{SV.c=$('sv-c').value;const k=b.dataset.sv,v=+b.dataset.v;if(k==='nps')SV.nps=v;else SV[k]=v;SV.err='';vSurvey()});
   $('sv-go').onclick=submitSurvey}
 async function submitSurvey(){SV.c=$('sv-c').value;if(!SV.score){SV.err='Lütfen genel memnuniyetinizi yıldızlarla belirtin.';return vSurvey()}
+  if(SV.d&&SV.d.demo){SV.d={...SV.d,done:true};return vSurvey()}
   SV.busy=true;SV.err='';vSurvey();
   try{const r=await rpcAnon('survey_submit',{p_token:SV.tok,p:{score:SV.score,staff_score:SV.staff||null,nps:SV.nps,comment:SV.c}});SV.d={...SV.d,done:true,got:r&&r.points,avail:r&&r.avail}}
   catch(e){SV.err=e.message}SV.busy=false;vSurvey()}
-async function loadSurvey(tok){SV.tok=tok;vSurvey();try{SV.d=await rpcAnon('survey_get',{p_token:tok})}catch(e){SV.d={ok:false}}vSurvey()}
+async function loadSurvey(tok){SV.tok=tok;if(tok===SV_DEMO){SV.d={ok:true,demo:true,ad:'Ayşe',sold_at:new Date(Date.now()-864e5).toISOString(),staff:'Emre'};return vSurvey()}vSurvey();try{SV.d=await rpcAnon('survey_get',{p_token:tok})}catch(e){SV.d={ok:false}}vSurvey()}
 const RET=(location.hash.match(/^#eposta-ret=([0-9a-f-]{36})$/i)||[])[1],ANK=(location.hash.match(/^#anket=([0-9a-f-]{36})$/i)||[])[1],
   YRM=location.hash.match(/^#yorum=([0-9a-f-]{36})(?:&u=([^&]+))?$/i);
 if(YRM)goReview(YRM[1],YRM[2]?decodeURIComponent(YRM[2]):'');else if(ANK)loadSurvey(ANK);else if(RET)vRet(RET);else if(S.tok)load();else render();
